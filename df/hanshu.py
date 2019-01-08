@@ -14,16 +14,16 @@ class hanshusss:
         list_code = []
         list_name = []
         list_urls = []
-        firefox_profile = webdriver.FirefoxProfile()
-        firefox_profile.set_preference('permissions.default.image', 2)  # 某些firefox只需要这个
+        # firefox_profile = webdriver.FirefoxProfile()
+        # firefox_profile.set_preference('permissions.default.image', 2)
         # firefox_profile.set_preference('browser.migration.version', 9001)#部分需要加上这个
         # 禁用css
         # firefox_profile.set_preference('permissions.default.stylesheet', 2)
         # 禁用flash
         # firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
-        # driver = webdriver.PhantomJS(executable_path=r'C:\Users\dell\Desktop\phantomjs-2.1.1-windows\bin\phantomjs')
-        driver = webdriver.Firefox(executable_path=r'C:\Program Files\Mozilla Firefox\geckodriver',
-                                   firefox_profile=firefox_profile)
+        driver = webdriver.PhantomJS(executable_path=r'C:\Users\dell\Desktop\phantomjs-2.1.1-windows\bin\phantomjs')
+        # driver = webdriver.Firefox(executable_path=r'C:\Program Files\Mozilla Firefox\geckodriver',
+        #                            firefox_profile=firefox_profile)
         driver.implicitly_wait(4)
         # url = 'http://quote.eastmoney.com/center/boardlist.html#boards-BK08541'
         driver.set_page_load_timeout(10)

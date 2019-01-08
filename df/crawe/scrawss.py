@@ -10,23 +10,23 @@ import datetime
 from df import hanshu as hss
 from df import mysqlxie as msql
 from df.hanshu import hanshusss
-
+from df.xieru import mysql_xie
 #huo = hss.hanshus()
 def crawe():
-    my_connection = msql.xiemysql('58edd9c77adb6.bj.cdb.myqcloud.com',
-                       5432,'root','1160329981wang','qianmancang','utf8mb4',pymysql.cursors.DictCursor)
-    connection = my_connection.connections()
+    # my_connection = msql.xiemysql('58edd9c77adb6.bj.cdb.myqcloud.com',
+    #                    5432,'root','1160329981wang','qianmancang','utf8mb4',pymysql.cursors.DictCursor)
+    # connection = my_connection.connections()
     # def huoqu_yiji:(url):
-    firefox_profile = webdriver.FirefoxProfile()
-    firefox_profile.set_preference('permissions.default.image', 2)  # 某些firefox只需要这个
+    # firefox_profile = webdriver.FirefoxProfile()
+    # firefox_profile.set_preference('permissions.default.image', 2)
     # firefox_profile.set_preference('browser.migration.version', 9001)#部分需要加上这个
     # 禁用css
     # firefox_profile.set_preference('permissions.default.stylesheet', 2)
     # 禁用flash
     # firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
-    # driver = webdriver.PhantomJS(executable_path=r'C:\Users\dell\Desktop\phantomjs-2.1.1-windows\bin\phantomjs')
-    driver = webdriver.Firefox(executable_path=r'C:\Program Files\Mozilla Firefox\geckodriver',
-                               firefox_profile=firefox_profile)
+    driver = webdriver.PhantomJS(executable_path=r'C:\Users\dell\Desktop\phantomjs-2.1.1-windows\bin\phantomjs')
+    # driver = webdriver.Firefox(executable_path=r'C:\Program Files\Mozilla Firefox\geckodriver',
+    #                            firefox_profile=firefox_profile)
     taday = datetime.date.today()
     list_urls = []
     url = 'http://quote.eastmoney.com/center/boardlist.html#concept_board'
@@ -71,18 +71,20 @@ def crawe():
             print('aaaaaaaaaaaaaaa', a, b)
             for name, code in zip(a, b):
                 print('---', name, code, name_gainian, taday)
-                try:
-                    with connection.cursor() as cursor:
-
-                        # 执行sql语句，插入记录
-                        SQL = """insert into gainian(name,code,gainian,date)
-                        values
-                        (%s, %s, %s, %s)"""
-                        cursor.execute(SQL, (name, code, name_gainian, taday))
-                        # 没有设置默认自动提交，需要主动提交，以保存所执行的语句
-                        connection.commit()
-                except Exception as e:
-                    print('***** Logging failed with this error:', str(e))
+                my_gainian = mysql_xie(name, code, name_gainian, taday)
+                my_gainian.xie_gainian()
+                # try:
+                #     with connection.cursor() as cursor:
+                #
+                #         # 执行sql语句，插入记录
+                #         SQL = """insert into gainian(name,code,gainian,date)
+                #         values
+                #         (%s, %s, %s, %s)"""
+                #         cursor.execute(SQL, (name, code, name_gainian, taday))
+                #         # 没有设置默认自动提交，需要主动提交，以保存所执行的语句
+                #         connection.commit()
+                # except Exception as e:
+                #     print('***** Logging failed with this error:', str(e))
         for tn in body.find_all('tr', class_='even'):
             name_gainian = tn.find_all('td')[1].get_text()
             wzs = tn.find_all('td')[1]('a')[0]['href']
@@ -106,18 +108,20 @@ def crawe():
             # list_code = b+d
             for names, codes in zip(c, d):
                 print('---', names, codes, name_gainian, taday)
-                try:
-                    with connection.cursor() as cursor:
-
-                        # 执行sql语句，插入记录
-                        SQL = """insert into gainian(name,code,gainian,date)
-                        values
-                        (%s, %s, %s, %s)"""
-                        cursor.execute(SQL, (names, codes, name_gainian, taday))
-                        # 没有设置默认自动提交，需要主动提交，以保存所执行的语句
-                        connection.commit()
-                except Exception as e:
-                    print('***** Logging failed with this error:', str(e))
+                my_gainian = mysql_xie(names, codes, name_gainian, taday)
+                my_gainian.xie_gainian()
+                # try:
+                #     with connection.cursor() as cursor:
+                #
+                #         # 执行sql语句，插入记录
+                #         SQL = """insert into gainian(name,code,gainian,date)
+                #         values
+                #         (%s, %s, %s, %s)"""
+                #         cursor.execute(SQL, (names, codes, name_gainian, taday))
+                #         # 没有设置默认自动提交，需要主动提交，以保存所执行的语句
+                #         connection.commit()
+                # except Exception as e:
+                #     print('***** Logging failed with this error:', str(e))
         driver.find_element_by_xpath('//*[@id="main-table_next"]').click()
         page = page + 1
         print('-------', page)
